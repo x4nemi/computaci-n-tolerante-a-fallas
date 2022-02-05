@@ -18,7 +18,7 @@ def menu():
         print("0) Salir")
         op = input("Opcion: ")
 
-        if op == "2" and p.vacia():
+        if (op == "2" or op == "3" or op == "4") and p.vacia():
             print("No hay elementos agregados")
             continue
 
