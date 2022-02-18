@@ -6,9 +6,8 @@ def clear():
     system('cls')
 
 class Paqueteria:
-    def __init__(self):
-        self.__lista = []
-    
+    def __init__(self, lista:list):
+        self.__lista = lista
 
     def agregar(self, paquete:Paquete):
         try:

@@ -1,6 +1,7 @@
 from paqueteria import Paqueteria
 from paquete import Paquete
 from os import system
+import pickle
 
 
 def clear():
@@ -13,8 +14,8 @@ def cadenaVacia(cadena):
     return False
 
 
-def menu():
-    p = Paqueteria()
+
+def menu(p:Paqueteria):
     while True:
         print("1) Agregar")
         print("2) Mostrar")
@@ -75,8 +76,16 @@ def menu():
         else:
             print("Esa opcion no existe")
         
+        pickledPaquete = pickle.dumps(p)
+        respaldo = pickle.loads(pickledPaquete)
+    
+        
         clear()
 
 
+p = Paqueteria()
+pickle_out = open("paqueteria", "wb")
+pickle.dump(p, pickle_out)
+pickle_out.close()
 
 menu()

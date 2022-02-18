@@ -1,6 +1,8 @@
 from paqueteria import Paqueteria
 from paquete import Paquete
 from os import system
+import pickle
+import os
 
 
 def clear():
@@ -13,8 +15,8 @@ def cadenaVacia(cadena):
     return False
 
 
-def menu():
-    p = Paqueteria()
+def menu(p:Paqueteria):
+    listaPaquetes = []
     while True:
         print("1) Agregar")
         print("2) Mostrar")
@@ -43,8 +45,16 @@ def menu():
 
                     paquete = Paquete(id, origen, destino, peso)
 
+                    listaPaquetes.append(paquete)
+                    pickledPaquete = pickle.dumps(listaPaquetes)
+                    pickle_out = open("paqueteria", "wb")
+                    pickle.dump(pickledPaquete, pickle_out)
+                    pickle_out.close()
+
                     if p.agregar(paquete):
                         print("Agregado...")
+                        
+
                         bandera = True
                     
                     else:
@@ -73,10 +83,40 @@ def menu():
             p.rastrear()
 
         else:
-            print("Esa opcion no existe")
+            print("Esa opcion no existe")    
         
         clear()
 
 
+lista = []
+p = Paqueteria()
 
-menu()
+
+if os.path.exists("paqueteria"):
+    tam_archivo = os.stat("paqueteria").st_size
+    if tam_archivo != 0:
+        print("Quieres volver a la última vez que corrieron el programa? (S/N")
+        respuesta = input(": ")
+        print(respuesta.lower())
+        
+        if respuesta.lower() == "n":
+            menu(p)
+        
+        elif respuesta.lower() == "s":
+            print("entro")
+            try:
+                pickle_in = open("paqueteria", "rb")
+                lista = pickle.load(pickle_in)
+                p = Paqueteria(lista)
+
+            except:
+                raise Exception("Error al respaldar")
+            
+            finally:
+                pickle_in.close()
+        
+        else:
+            print("Bye")
+
+else:
+    menu(p)
