@@ -1,0 +1,4 @@
+Id: 1
+Origen: a
+Destino: b
+Peso: 2.0
