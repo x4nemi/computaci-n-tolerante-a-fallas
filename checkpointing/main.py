@@ -21,11 +21,10 @@ def menu(p:Paqueteria):
         print("2) Mostrar")
         print("3) Respaldar")
         print("4) Rastrear")
-        print("5) Serializar")
         print("0) Salir")
         op = input("Opcion: ")
 
-        if (op == "2" or op == "3" or op == "4" or p == "5") and p.vacia():
+        if (op == "2" or op == "3" or op == "4") and p.vacia():
             print("No hay elementos agregados")
             continue
 
@@ -53,6 +52,9 @@ def menu(p:Paqueteria):
                     # pickle_out.close()
 
                     if p.agregar(paquete):
+                        fileHander = open("paqueterias", "wb")
+                        pickle.dump(p, fileHander)
+                        fileHander.close()
                         print("Agregado...")
                         bandera = True
                     
@@ -84,16 +86,6 @@ def menu(p:Paqueteria):
         else:
             print("Esa opcion no existe")    
         
-        fileHander = open("paqueterias", "wb")
-        #try: 
-        pickle.dump(p, fileHander)
-            
-        # except:
-        #     Exception("No se pudo serializar")
-        
-        # finally:
-        fileHander.close()
-        
         clear()
 
 
@@ -110,7 +102,7 @@ if os.path.exists("paqueterias"):
             menu(p)
         
         elif respuesta.lower() == "s":
-            print("entro")
+            
             try:
                 pickle_in = open("paqueterias", "rb")
                 #lista = pickle.load(pickle_in)

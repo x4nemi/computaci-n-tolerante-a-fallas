@@ -1,4 +1,0 @@
-Id: 1
-Origen: 2
-Destino: 3
-Peso: 4.0
