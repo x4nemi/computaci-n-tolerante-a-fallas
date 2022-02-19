@@ -5,6 +5,9 @@ class Paquete:
         self.__destino = destino #pública
         self.__peso = peso
     
+    def __str__(self):
+        return f"ID: {self.__id}\nOrigen: {self.__origen}\nDestino: {self.__destino}\nPeso: {self.__peso}\n\n"
+    
     @property
     def id(self):
         return self.__id

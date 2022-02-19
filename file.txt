@@ -1,4 +1,4 @@
 Id: 1
-Origen: a
-Destino: b
-Peso: 2.0
+Origen: 2
+Destino: 3
+Peso: 4.0

@@ -16,16 +16,16 @@ def cadenaVacia(cadena):
 
 
 def menu(p:Paqueteria):
-    listaPaquetes = []
     while True:
         print("1) Agregar")
         print("2) Mostrar")
         print("3) Respaldar")
         print("4) Rastrear")
+        print("5) Serializar")
         print("0) Salir")
         op = input("Opcion: ")
 
-        if (op == "2" or op == "3" or op == "4") and p.vacia():
+        if (op == "2" or op == "3" or op == "4" or p == "5") and p.vacia():
             print("No hay elementos agregados")
             continue
 
@@ -45,16 +45,15 @@ def menu(p:Paqueteria):
 
                     paquete = Paquete(id, origen, destino, peso)
 
-                    listaPaquetes.append(paquete)
-                    pickledPaquete = pickle.dumps(listaPaquetes)
-                    pickle_out = open("paqueteria", "wb")
-                    pickle.dump(pickledPaquete, pickle_out)
-                    pickle_out.close()
+                    # listaPaquetes.append(paquete)
+                    # print(listaPaquetes)
+                    # pickledPaquete = pickle.dumps(listaPaquetes)
+                    # pickle_out = open("paqueteria", "wb")
+                    # pickle.dump(pickledPaquete, pickle_out)
+                    # pickle_out.close()
 
                     if p.agregar(paquete):
                         print("Agregado...")
-                        
-
                         bandera = True
                     
                     else:
@@ -85,15 +84,23 @@ def menu(p:Paqueteria):
         else:
             print("Esa opcion no existe")    
         
+        fileHander = open("paqueterias", "wb")
+        #try: 
+        pickle.dump(p, fileHander)
+            
+        # except:
+        #     Exception("No se pudo serializar")
+        
+        # finally:
+        fileHander.close()
+        
         clear()
 
 
-lista = []
 p = Paqueteria()
 
-
-if os.path.exists("paqueteria"):
-    tam_archivo = os.stat("paqueteria").st_size
+if os.path.exists("paqueterias"):
+    tam_archivo = os.stat("paqueterias").st_size # el archivo debe tener algo
     if tam_archivo != 0:
         print("Quieres volver a la última vez que corrieron el programa? (S/N")
         respuesta = input(": ")
@@ -105,9 +112,11 @@ if os.path.exists("paqueteria"):
         elif respuesta.lower() == "s":
             print("entro")
             try:
-                pickle_in = open("paqueteria", "rb")
-                lista = pickle.load(pickle_in)
-                p = Paqueteria(lista)
+                pickle_in = open("paqueterias", "rb")
+                #lista = pickle.load(pickle_in)
+                paqueteria = pickle.load(pickle_in)
+                pickle_in.close()
+                menu(paqueteria)
 
             except:
                 raise Exception("Error al respaldar")
@@ -117,6 +126,7 @@ if os.path.exists("paqueteria"):
         
         else:
             print("Bye")
+    else:
+        menu(p)
 
-else:
-    menu(p)
+menu(p)

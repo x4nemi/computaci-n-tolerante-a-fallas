@@ -9,6 +9,8 @@ class Paqueteria:
     def __init__(self):
         self.__lista = []
     
+    def listaHecha(self, lista:list):
+        self.__lista = lista
 
     def agregar(self, paquete:Paquete):
         try:
