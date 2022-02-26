@@ -4,6 +4,31 @@ from os import system
 import pickle
 import os
 
+from threading import Thread
+import time
+
+# Clase para el hilo
+# Se va a correr mientras se esté guardando, muchas veces
+class SerializarHilo(Thread):
+    def __init__(self, objeto):
+        Thread.__init__(self)
+        self.running = True
+        self.objeto = objeto
+        self.daemon = True
+
+    def run(self):
+        while self.running:
+            try:
+                fileHander = open("paqueterias", "wb")
+                pickle.dump(self.objeto, fileHander)
+            except:
+                print("No se pudo guardad")
+            finally:
+                fileHander.close()
+
+    def stop(self):
+        self.running = False
+
 
 def clear():
     input()
@@ -35,6 +60,8 @@ def menu(p:Paqueteria):
             bandera = False
             while not bandera:
                 try:
+                    hilo = SerializarHilo(p)
+                    hilo.start()
                     id = int(input("Id: "))                        
                     origen = input("Origen: ")
                     destino = input("Destino: ")
@@ -50,19 +77,19 @@ def menu(p:Paqueteria):
                     # pickle_out = open("paqueteria", "wb")
                     # pickle.dump(pickledPaquete, pickle_out)
                     # pickle_out.close()
-
-                    if p.agregar(paquete):
-                        fileHander = open("paqueterias", "wb")
-                        pickle.dump(p, fileHander)
-                        fileHander.close()
-                        print("Agregado...")
-                        bandera = True
+                    p.agregar(paquete)
+                    # if p.agregar(paquete): # sólo se agrega si se se escriben bien los parámetros
+                    #     print("Agregado...")
+                    bandera = True
                     
-                    else:
-                        clear()
+                    clear()
+                    hilo.stop()
 
                 except:
                     print("ID-Entero, Origen y Destino-Cadena, Peso-Real")
+                
+                finally:
+                    hilo.stop()
                 
 
         elif op == "2":
@@ -88,8 +115,20 @@ def menu(p:Paqueteria):
         
         clear()
 
+def agregarPaquete(p:Paqueteria):
+    id = int(input("Id: "))                        
+    origen = input("Origen: ")
+    destino = input("Destino: ")
+    if cadenaVacia(origen) or cadenaVacia(destino):
+        raise Exception("No puedes dejar la cadena vacia")
+    peso = float(input("Peso: "))
+
+    paquete = Paquete(id, origen, destino, peso)
+
 
 p = Paqueteria()
+
+
 
 if os.path.exists("paqueterias"):
     tam_archivo = os.stat("paqueterias").st_size # el archivo debe tener algo
