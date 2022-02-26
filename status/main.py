@@ -1,34 +1,9 @@
 from paqueteria import Paqueteria
 from paquete import Paquete
+from hilo import SerializarHilo
 from os import system
 import pickle
 import os
-
-from threading import Thread
-import time
-
-# Clase para el hilo
-# Se va a correr mientras se esté guardando, muchas veces
-class SerializarHilo(Thread):
-    def __init__(self, objeto):
-        Thread.__init__(self)
-        self.running = True
-        self.objeto = objeto
-        self.daemon = True
-
-    def run(self):
-        while self.running:
-            try:
-                fileHander = open("paqueterias", "wb")
-                pickle.dump(self.objeto, fileHander)
-            except:
-                print("No se pudo guardad")
-            finally:
-                fileHander.close()
-
-    def stop(self):
-        self.running = False
-
 
 def clear():
     input()
@@ -61,7 +36,7 @@ def menu(p:Paqueteria):
             while not bandera:
                 try:
                     hilo = SerializarHilo(p)
-                    hilo.start()
+                    hilo.start() #
                     id = int(input("Id: "))                        
                     origen = input("Origen: ")
                     destino = input("Destino: ")
@@ -77,13 +52,12 @@ def menu(p:Paqueteria):
                     # pickle_out = open("paqueteria", "wb")
                     # pickle.dump(pickledPaquete, pickle_out)
                     # pickle_out.close()
-                    p.agregar(paquete)
-                    # if p.agregar(paquete): # sólo se agrega si se se escriben bien los parámetros
-                    #     print("Agregado...")
-                    bandera = True
-                    
-                    clear()
-                    hilo.stop()
+                    if p.agregar(paquete): # sólo se agrega si se se escriben bien los parámetros
+                        print("Agregado...")
+                        bandera = True
+                        hilo.stop()
+                    else:
+                        clear()
 
                 except:
                     print("ID-Entero, Origen y Destino-Cadena, Peso-Real")
@@ -133,9 +107,8 @@ p = Paqueteria()
 if os.path.exists("paqueterias"):
     tam_archivo = os.stat("paqueterias").st_size # el archivo debe tener algo
     if tam_archivo != 0:
-        print("Quieres volver a la última vez que corrieron el programa? (S/N")
+        print("Quieres reestablecer lo que habías guardado anteriormente? (S/N)")
         respuesta = input(": ")
-        print(respuesta.lower())
         
         if respuesta.lower() == "n":
             menu(p)
