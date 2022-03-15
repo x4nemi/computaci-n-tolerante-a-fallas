@@ -9,7 +9,7 @@ from airflow.operators.python import PythonOperator
 
 
 default_args = {
-    'owner': 'Diana',
+    'owner': 'xanemi',
     'depends_on_past': False,
     'email': ['ximena.garcia7482@alumnos.udg.mx'],
     'email_on_failure': True,
