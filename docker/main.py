@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+a = 5
+b = 3
 
-app = FastAPI()
+c = a + b
 
-@app.get("/")
-def read_root():
-    return {"Hola":"Mundo 00"}
+print(f"{a} + {b} = {c}")
+print("Done")
